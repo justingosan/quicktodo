@@ -1,4 +1,4 @@
-package cmd
+package commands
 
 import (
 	"fmt"
@@ -12,11 +12,11 @@ var versionCmd = &cobra.Command{
 	Short: "Show version information",
 	Long:  `Display the version information for QuickTodo CLI tool.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("QuickTodo CLI v%s\n", rootCmd.Version)
+		fmt.Printf("QuickTodo CLI v%s\n", RootCmd.Version)
 		fmt.Println("A simple CLI todo management tool for AI-assisted development workflows")
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(versionCmd)
+	RootCmd.AddCommand(versionCmd)
 }
