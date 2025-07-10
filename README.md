@@ -1,118 +1,70 @@
 # QuickTodo
 
-A simple CLI todo management tool designed for AI-assisted development workflows. QuickTodo provides a lightweight, fast, and AI-friendly interface for managing tasks across multiple projects.
+A simple todo list CLI built specifically for AI coding workflows. 
 
-## Features
+## Why QuickTodo?
 
-- **Multi-project support**: Manage tasks across different projects
-- **File-based storage**: Simple JSON file storage with no external dependencies
-- **Concurrent access**: Safe concurrent access with file locking
-- **AI-friendly**: JSON output and descriptive commands for AI agents
-- **Fast and lightweight**: Single binary with minimal dependencies
+- **Built for AI**: Designed from the ground up for AI-assisted development
+- **Lightweight alternative**: Simple alternative to taskmaster.dev which can feel bloated
+- **Zero setup**: Just run `init` and start coding with your AI
 
 ## Installation
 
-### From Source (Recommended)
-
 ```bash
-# Clone the repository
+# Install from source
 git clone https://github.com/yourusername/quicktodo.git
 cd quicktodo
-
-# Build and install
 make install
 
-# Or build for development
-make build
+# Or download binary from releases
 ```
 
-### Using Go Install
+## How to Use
 
+### 1. Initialize in your project
 ```bash
-go install github.com/yourusername/quicktodo@latest
+cd your-project
+quicktodo init
+```
+This creates a `QUICKTODO.md` file with AI usage instructions.
+
+### 2. Configure your AI
+Add this to your `.cursorrules` or `CLAUDE.md`:
+```
+Refer to ./QUICKTODO.md for task management instructions.
 ```
 
-### Download Binary
-
-Download pre-built binaries from the [releases page](https://github.com/yourusername/quicktodo/releases).
-
-## Quick Start
+### 3. Code with AI in YOLO mode
+Run your AI coder with maximum autonomy - QuickTodo handles the task tracking:
 
 ```bash
-# Initialize a project
-quicktodo initialize-project
+# AI creates tasks
+quicktodo create-task "Fix user login bug" --priority high
 
-# Create a new task
-quicktodo create-task "Implement user authentication"
+# AI lists current work  
+quicktodo list-tasks --json
 
-# List all tasks
-quicktodo list-tasks
-
-# Mark a task as completed
+# AI marks tasks complete
 quicktodo mark-completed 1
 ```
 
-## Commands
-
-### Project Management
-- `quicktodo initialize-project [name]` - Register current directory as project
-- `quicktodo list-projects` - Show all registered projects
-- `quicktodo project-status` - Show current project information
-
-### Task Management
-- `quicktodo create-task "title"` - Add new task to current project
-- `quicktodo list-tasks` - Show all tasks with optional filters
-- `quicktodo display-task <id>` - Show detailed task information
-- `quicktodo edit-task <id>` - Modify task details
-- `quicktodo delete-task <id>` - Remove task from project
-
-### Status Operations
-- `quicktodo mark-completed <id>` - Mark task as done
-- `quicktodo mark-in-progress <id>` - Start working on task
-- `quicktodo update-status <id> <status>` - Change task status
-
-### Advanced Features
-- `quicktodo search-tasks <query>` - Find tasks by text search
-- `quicktodo export-data` - Export tasks to file
-- `quicktodo import-data <file>` - Import tasks from file
-
-## Documentation
-
-For detailed usage and AI integration, see the [QUICKTODO.md](QUICKTODO.md) file.
-
-## Development
-
-### Building
+## Basic Commands
 
 ```bash
-make build       # Build for current platform
-make build-all   # Cross-compile for all platforms
-make dev         # Development build
+quicktodo init                           # Initialize project
+quicktodo create-task "Task title"       # Create new task
+quicktodo list-tasks                     # List all tasks
+quicktodo display-task 1                 # Show task details
+quicktodo mark-completed 1               # Mark task done
 ```
 
-### Testing
+All commands support `--json` for AI consumption.
 
-```bash
-make test        # Run tests
-make ci          # Full CI pipeline (format, vet, test, build)
-```
+## Why not taskmaster.dev?
 
-### Installation
+TaskMaster is powerful but can be overwhelming for simple AI workflows. QuickTodo focuses on:
+- **Simplicity**: One command to get started
+- **Speed**: Minimal overhead, maximum coding time
+- **AI-first**: Every feature designed for AI interaction
 
-```bash
-make install     # Install to /usr/local/bin
-make uninstall   # Remove installed binary
-```
-
-### Other Commands
-
-```bash
-make clean       # Remove build artifacts
-make fmt         # Format code
-make vet         # Vet code
-make help        # Show all available targets
-```
-
-## License
-
-MIT License
+Perfect for when you want to let AI loose on your codebase without complex project management overhead.
