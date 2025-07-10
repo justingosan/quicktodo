@@ -1,6 +1,6 @@
 # QuickTodo
 
-A simple todo list CLI built specifically for AI coding workflows. 
+A simple todo list CLI built specifically for AI coding workflows.
 
 ## Why QuickTodo?
 
@@ -12,7 +12,7 @@ A simple todo list CLI built specifically for AI coding workflows.
 
 ```bash
 # Install from source
-git clone https://github.com/yourusername/quicktodo.git
+git clone https://github.com/justingosan/quicktodo.git
 cd quicktodo
 make install
 
@@ -41,7 +41,7 @@ Run your AI coder with maximum autonomy - QuickTodo handles the task tracking:
 # AI creates tasks
 quicktodo create-task "Fix user login bug" --priority high
 
-# AI lists current work  
+# AI lists current work
 quicktodo list-tasks --json
 
 # AI marks tasks complete
