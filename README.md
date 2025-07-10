@@ -26,12 +26,11 @@ make install
 cd your-project
 quicktodo init
 ```
-This creates a `QUICKTODO.md` file with AI usage instructions.
 
 ### 2. Configure your AI
 Add this to your `.cursorrules` or `CLAUDE.md`:
 ```
-Before doing anything, read the QUICKTODO.md file and follow the instructions to create and manage your tasks
+For task management, run: quicktodo context
 ```
 
 ### 3. Code with AI in YOLO mode
