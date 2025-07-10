@@ -161,10 +161,10 @@ QuickTodo is a simple CLI todo management tool designed for AI-assisted developm
 **Task 3.1: Initialize Project Command** ✅ COMPLETED
 ```bash
 # Create project initialization command
-# - Add 'quicktodo initialize-project [project_name]' command
-# - Also support alias 'quicktodo init-project' for shorter typing
+# - Add 'quicktodo init [project_name]' command (simplified from initialize-project)
 # - Register current directory as project in registry
 # - Create project database file
+# - Generate QUICKTODO.md with AI usage instructions
 # - Add validation for existing projects
 # - Support custom project names or auto-generate from directory
 ```
@@ -362,7 +362,7 @@ QuickTodo is a simple CLI todo management tool designed for AI-assisted developm
 ## Command Reference Summary
 
 ### Primary Commands (verbose, descriptive)
-- `quicktodo initialize-project [name]` - Register current directory as project
+- `quicktodo init [name]` - Initialize current directory as QuickTodo project
 - `quicktodo create-task "title"` - Add new task to current project
 - `quicktodo list-tasks [--status] [--priority]` - Show all tasks with filters
 - `quicktodo display-task <id>` - Show detailed task information
@@ -378,7 +378,6 @@ QuickTodo is a simple CLI todo management tool designed for AI-assisted developm
 - `quicktodo import-data <file>` - Import tasks from file
 
 ### Convenient Aliases (shorter alternatives)
-- `quicktodo init-project` → `initialize-project`
 - `quicktodo new-task` → `create-task`
 - `quicktodo show-tasks` → `list-tasks`
 - `quicktodo get-task` → `display-task`
