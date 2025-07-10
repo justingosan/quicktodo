@@ -12,9 +12,29 @@ A simple CLI todo management tool designed for AI-assisted development workflows
 
 ## Installation
 
+### From Source (Recommended)
+
 ```bash
-go install quicktodo
+# Clone the repository
+git clone https://github.com/yourusername/quicktodo.git
+cd quicktodo
+
+# Build and install
+make install
+
+# Or build for development
+make build
 ```
+
+### Using Go Install
+
+```bash
+go install github.com/yourusername/quicktodo@latest
+```
+
+### Download Binary
+
+Download pre-built binaries from the [releases page](https://github.com/yourusername/quicktodo/releases).
 
 ## Quick Start
 
@@ -58,7 +78,40 @@ quicktodo mark-completed 1
 
 ## Documentation
 
-For detailed usage and AI integration, see the [AGENTS.md](AGENTS.md) file.
+For detailed usage and AI integration, see the [QUICKTODO.md](QUICKTODO.md) file.
+
+## Development
+
+### Building
+
+```bash
+make build       # Build for current platform
+make build-all   # Cross-compile for all platforms
+make dev         # Development build
+```
+
+### Testing
+
+```bash
+make test        # Run tests
+make ci          # Full CI pipeline (format, vet, test, build)
+```
+
+### Installation
+
+```bash
+make install     # Install to /usr/local/bin
+make uninstall   # Remove installed binary
+```
+
+### Other Commands
+
+```bash
+make clean       # Remove build artifacts
+make fmt         # Format code
+make vet         # Vet code
+make help        # Show all available targets
+```
 
 ## License
 
