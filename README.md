@@ -59,12 +59,3 @@ quicktodo mark-completed 1               # Mark task done
 ```
 
 All commands support `--json` for AI consumption.
-
-## Why not taskmaster.dev?
-
-TaskMaster is powerful but can be overwhelming for simple AI workflows. QuickTodo focuses on:
-- **Simplicity**: One command to get started
-- **Speed**: Minimal overhead, maximum coding time
-- **AI-first**: Every feature designed for AI interaction
-
-Perfect for when you want to let AI loose on your codebase without complex project management overhead.
