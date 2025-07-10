@@ -30,7 +30,28 @@ quicktodo init
 ### 2. Configure your AI
 Add this to your `.cursorrules` or `CLAUDE.md`:
 ```
-For task management, run: quicktodo context
+Before starting any task, use the quicktodo task management tool. If you don't know how to use it, run: quicktodo context
+```
+
+**For Claude Code users**: Set up a PreToolUse hook to automatically run `quicktodo context` before any tool use. This ensures instructions are always available throughout long conversations:
+
+```json
+// ~/.claude/settings.json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "quicktodo context",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
 ```
 
 ### 3. Code with AI in YOLO mode
