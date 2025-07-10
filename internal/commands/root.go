@@ -26,4 +26,7 @@ func init() {
 	RootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Enable verbose output")
 	RootCmd.PersistentFlags().StringVar(&agentID, "agent-id", "", "Agent identifier for AI coordination")
 	RootCmd.PersistentFlags().BoolVar(&jsonOutput, "json", false, "Output in JSON format")
+	
+	// Disable completion command
+	RootCmd.CompletionOptions.DisableDefaultCmd = true
 }
