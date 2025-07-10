@@ -153,7 +153,7 @@ func outputTasksJSON(tasks []*models.Task, projectInfo *database.ProjectInfo) {
 func outputTasksHuman(tasks []*models.Task, projectInfo *database.ProjectInfo) {
 	// Project header
 	fmt.Printf("Project: %s (%s)\n", projectInfo.Name, projectInfo.Path)
-	
+
 	if len(tasks) == 0 {
 		fmt.Println("No tasks found")
 		if statusFilter != "" || priorityFilter != "" || assignedFilter != "" {
@@ -184,28 +184,28 @@ func displayTask(task *models.Task) {
 	// Status indicator
 	statusIcon := getStatusIcon(task.Status)
 	priorityColor := getPriorityIndicator(task.Priority)
-	
+
 	fmt.Printf("%s #%-3d %s%s\n", statusIcon, task.ID, priorityColor, task.Title)
-	
+
 	if task.Description != "" {
 		fmt.Printf("     %s\n", task.Description)
 	}
-	
+
 	// Show metadata in verbose mode or if assigned
 	if verbose || task.AssignedTo != "" {
 		var metadata []string
-		
+
 		metadata = append(metadata, fmt.Sprintf("Priority: %s", task.Priority))
 		metadata = append(metadata, fmt.Sprintf("Created: %s", task.GetAge()))
-		
+
 		if task.AssignedTo != "" {
 			metadata = append(metadata, fmt.Sprintf("Assigned: %s", task.AssignedTo))
 		}
-		
+
 		if task.IsLocked() {
 			metadata = append(metadata, fmt.Sprintf("Locked by: %s", task.LockedBy))
 		}
-		
+
 		fmt.Printf("     %s\n", strings.Join(metadata, " | "))
 	}
 }
@@ -250,7 +250,7 @@ func showTaskSummary(tasks []*models.Task) {
 		statusCounts[models.StatusPending],
 		statusCounts[models.StatusInProgress],
 		statusCounts[models.StatusDone])
-	
+
 	fmt.Printf("  Priority: %d high, %d medium, %d low\n",
 		priorityCounts[models.PriorityHigh],
 		priorityCounts[models.PriorityMedium],
@@ -261,6 +261,6 @@ func init() {
 	listTasksCmd.Flags().StringVarP(&statusFilter, "status", "s", "", "Filter by status (pending, in_progress, done)")
 	listTasksCmd.Flags().StringVarP(&priorityFilter, "priority", "p", "", "Filter by priority (low, medium, high)")
 	listTasksCmd.Flags().StringVarP(&assignedFilter, "assigned-to", "a", "", "Filter by assignee")
-	
+
 	RootCmd.AddCommand(listTasksCmd)
 }

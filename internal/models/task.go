@@ -107,31 +107,31 @@ func (t *Task) Validate() error {
 	if t.ID <= 0 {
 		return fmt.Errorf("task ID must be positive")
 	}
-	
+
 	if t.Title == "" {
 		return fmt.Errorf("task title cannot be empty")
 	}
-	
+
 	if !IsValidStatus(string(t.Status)) {
 		return fmt.Errorf("invalid status: %s", t.Status)
 	}
-	
+
 	if !IsValidPriority(string(t.Priority)) {
 		return fmt.Errorf("invalid priority: %s", t.Priority)
 	}
-	
+
 	if t.CreatedAt.IsZero() {
 		return fmt.Errorf("created_at cannot be zero")
 	}
-	
+
 	if t.UpdatedAt.IsZero() {
 		return fmt.Errorf("updated_at cannot be zero")
 	}
-	
+
 	if t.UpdatedAt.Before(t.CreatedAt) {
 		return fmt.Errorf("updated_at cannot be before created_at")
 	}
-	
+
 	return nil
 }
 
@@ -140,10 +140,10 @@ func (t *Task) UpdateStatus(status Status) error {
 	if !IsValidStatus(string(status)) {
 		return fmt.Errorf("invalid status: %s", status)
 	}
-	
+
 	t.Status = status
 	t.UpdatedAt = time.Now()
-	
+
 	return nil
 }
 
@@ -152,10 +152,10 @@ func (t *Task) UpdatePriority(priority Priority) error {
 	if !IsValidPriority(string(priority)) {
 		return fmt.Errorf("invalid priority: %s", priority)
 	}
-	
+
 	t.Priority = priority
 	t.UpdatedAt = time.Now()
-	
+
 	return nil
 }
 
@@ -164,10 +164,10 @@ func (t *Task) UpdateTitle(title string) error {
 	if title == "" {
 		return fmt.Errorf("task title cannot be empty")
 	}
-	
+
 	t.Title = title
 	t.UpdatedAt = time.Now()
-	
+
 	return nil
 }
 
@@ -210,7 +210,7 @@ func (t *Task) IsStale() bool {
 	if !t.IsLocked() {
 		return false
 	}
-	
+
 	return time.Since(t.LockedAt) > 5*time.Minute
 }
 
@@ -241,11 +241,11 @@ func FromJSON(data []byte) (*Task, error) {
 	if err := json.Unmarshal(data, &task); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal task: %w", err)
 	}
-	
+
 	if err := task.Validate(); err != nil {
 		return nil, fmt.Errorf("invalid task data: %w", err)
 	}
-	
+
 	return &task, nil
 }
 
@@ -277,15 +277,15 @@ func (t *Task) GetDuration() time.Duration {
 // GetAge returns the age of the task in a human-readable format
 func (t *Task) GetAge() string {
 	duration := t.GetDuration()
-	
+
 	if duration < time.Hour {
 		return fmt.Sprintf("%d minutes", int(duration.Minutes()))
 	}
-	
+
 	if duration < 24*time.Hour {
 		return fmt.Sprintf("%d hours", int(duration.Hours()))
 	}
-	
+
 	return fmt.Sprintf("%d days", int(duration.Hours()/24))
 }
 
@@ -302,19 +302,19 @@ func (f *TaskFilter) Matches(task *Task) bool {
 	if f.Status != nil && task.Status != *f.Status {
 		return false
 	}
-	
+
 	if f.Priority != nil && task.Priority != *f.Priority {
 		return false
 	}
-	
+
 	if f.AssignedTo != nil && task.AssignedTo != *f.AssignedTo {
 		return false
 	}
-	
+
 	if f.LockedBy != nil && task.LockedBy != *f.LockedBy {
 		return false
 	}
-	
+
 	return true
 }
 
@@ -329,7 +329,7 @@ func (s *TaskSorter) Sort(tasks []*Task) {
 	if len(tasks) <= 1 {
 		return
 	}
-	
+
 	// Simple bubble sort for now - can be optimized later
 	for i := 0; i < len(tasks)-1; i++ {
 		for j := 0; j < len(tasks)-i-1; j++ {
@@ -343,7 +343,7 @@ func (s *TaskSorter) Sort(tasks []*Task) {
 // shouldSwap determines if two tasks should be swapped based on sort criteria
 func (s *TaskSorter) shouldSwap(t1, t2 *Task) bool {
 	var result bool
-	
+
 	switch s.Field {
 	case "id":
 		result = t1.ID > t2.ID
@@ -363,11 +363,11 @@ func (s *TaskSorter) shouldSwap(t1, t2 *Task) bool {
 	default:
 		result = t1.ID > t2.ID // Default to ID sorting
 	}
-	
+
 	if s.Desc {
 		return result
 	}
-	
+
 	return !result
 }
 

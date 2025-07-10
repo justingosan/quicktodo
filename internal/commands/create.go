@@ -115,7 +115,7 @@ func runCreateTask(cmd *cobra.Command, args []string) {
 
 	// Create new task
 	task := models.NewTaskWithDetails(projectDB.NextID, title, taskDescription, priority)
-	
+
 	// Assign to agent if specified
 	if agentID != "" {
 		task.AssignTo(agentID)
@@ -201,6 +201,6 @@ func outputTaskJSON(task *models.Task) {
 func init() {
 	createTaskCmd.Flags().StringVarP(&taskDescription, "description", "d", "", "Task description")
 	createTaskCmd.Flags().StringVarP(&taskPriority, "priority", "p", "", "Task priority (low, medium, high)")
-	
+
 	RootCmd.AddCommand(createTaskCmd)
 }

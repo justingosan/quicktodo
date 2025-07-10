@@ -5,8 +5,8 @@ import (
 )
 
 var (
-	verbose bool
-	agentID string
+	verbose    bool
+	agentID    string
 	jsonOutput bool
 )
 

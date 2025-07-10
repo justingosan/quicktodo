@@ -9,12 +9,12 @@ import (
 
 // Config represents the global configuration
 type Config struct {
-	DataDir        string `json:"data_dir"`
-	LockTimeout    int    `json:"lock_timeout"`    // in seconds
-	StaleTimeout   int    `json:"stale_timeout"`   // in minutes
+	DataDir         string `json:"data_dir"`
+	LockTimeout     int    `json:"lock_timeout"`  // in seconds
+	StaleTimeout    int    `json:"stale_timeout"` // in minutes
 	DefaultPriority string `json:"default_priority"`
-	CreateBackups  bool   `json:"create_backups"`
-	MaxBackups     int    `json:"max_backups"`
+	CreateBackups   bool   `json:"create_backups"`
+	MaxBackups      int    `json:"max_backups"`
 }
 
 // DefaultConfig returns the default configuration
@@ -23,14 +23,14 @@ func DefaultConfig() *Config {
 	if err != nil {
 		homeDir = ""
 	}
-	
+
 	return &Config{
-		DataDir:        filepath.Join(homeDir, ".config", "quicktodo"),
-		LockTimeout:    30,
-		StaleTimeout:   5,
+		DataDir:         filepath.Join(homeDir, ".config", "quicktodo"),
+		LockTimeout:     30,
+		StaleTimeout:    5,
 		DefaultPriority: "medium",
-		CreateBackups:  true,
-		MaxBackups:     5,
+		CreateBackups:   true,
+		MaxBackups:      5,
 	}
 }
 
@@ -46,7 +46,7 @@ func GetConfigPath() string {
 // Load loads the configuration from file or creates default if not exists
 func Load() (*Config, error) {
 	configPath := GetConfigPath()
-	
+
 	// If config file doesn't exist, create it with defaults
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		config := DefaultConfig()
@@ -55,46 +55,46 @@ func Load() (*Config, error) {
 		}
 		return config, nil
 	}
-	
+
 	// Read existing config
 	data, err := os.ReadFile(configPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read config file: %w", err)
 	}
-	
+
 	var config Config
 	if err := json.Unmarshal(data, &config); err != nil {
 		return nil, fmt.Errorf("failed to parse config file: %w", err)
 	}
-	
+
 	// Validate and set defaults for missing fields
 	if err := config.Validate(); err != nil {
 		return nil, fmt.Errorf("invalid config: %w", err)
 	}
-	
+
 	return &config, nil
 }
 
 // Save saves the configuration to file
 func (c *Config) Save() error {
 	configPath := GetConfigPath()
-	
+
 	// Create config directory if it doesn't exist
 	if err := os.MkdirAll(filepath.Dir(configPath), 0755); err != nil {
 		return fmt.Errorf("failed to create config directory: %w", err)
 	}
-	
+
 	// Marshal config to JSON
 	data, err := json.MarshalIndent(c, "", "  ")
 	if err != nil {
 		return fmt.Errorf("failed to marshal config: %w", err)
 	}
-	
+
 	// Write to file
 	if err := os.WriteFile(configPath, data, 0644); err != nil {
 		return fmt.Errorf("failed to write config file: %w", err)
 	}
-	
+
 	return nil
 }
 
@@ -103,33 +103,33 @@ func (c *Config) Validate() error {
 	if c.DataDir == "" {
 		return fmt.Errorf("data_dir cannot be empty")
 	}
-	
+
 	if c.LockTimeout <= 0 {
 		c.LockTimeout = 30
 	}
-	
+
 	if c.StaleTimeout <= 0 {
 		c.StaleTimeout = 5
 	}
-	
+
 	if c.DefaultPriority == "" {
 		c.DefaultPriority = "medium"
 	}
-	
+
 	validPriorities := map[string]bool{
 		"low":    true,
 		"medium": true,
 		"high":   true,
 	}
-	
+
 	if !validPriorities[c.DefaultPriority] {
 		return fmt.Errorf("invalid default_priority: %s (must be low, medium, or high)", c.DefaultPriority)
 	}
-	
+
 	if c.MaxBackups < 0 {
 		c.MaxBackups = 5
 	}
-	
+
 	return nil
 }
 
@@ -160,12 +160,12 @@ func (c *Config) EnsureAllDirectories() error {
 		filepath.Join(c.DataDir, "projects"),
 		filepath.Join(c.DataDir, "locks"),
 	}
-	
+
 	for _, dir := range dirs {
 		if err := os.MkdirAll(dir, 0755); err != nil {
 			return fmt.Errorf("failed to create directory %s: %w", dir, err)
 		}
 	}
-	
+
 	return nil
 }

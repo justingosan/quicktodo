@@ -40,18 +40,18 @@ func LoadProjectRegistry(filePath string) (*ProjectRegistry, error) {
 		}
 		return registry, nil
 	}
-	
+
 	// Read existing registry
 	data, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read registry file: %w", err)
 	}
-	
+
 	var registry ProjectRegistry
 	if err := json.Unmarshal(data, &registry); err != nil {
 		return nil, fmt.Errorf("failed to parse registry file: %w", err)
 	}
-	
+
 	// Initialize maps if they are nil
 	if registry.Projects == nil {
 		registry.Projects = make(map[string]*ProjectInfo)
@@ -59,7 +59,7 @@ func LoadProjectRegistry(filePath string) (*ProjectRegistry, error) {
 	if registry.PathToProject == nil {
 		registry.PathToProject = make(map[string]string)
 	}
-	
+
 	return &registry, nil
 }
 
@@ -69,24 +69,24 @@ func (r *ProjectRegistry) Save(filePath string) error {
 	if err := os.MkdirAll(filepath.Dir(filePath), 0755); err != nil {
 		return fmt.Errorf("failed to create directory: %w", err)
 	}
-	
+
 	// Marshal registry to JSON
 	data, err := json.MarshalIndent(r, "", "  ")
 	if err != nil {
 		return fmt.Errorf("failed to marshal registry: %w", err)
 	}
-	
+
 	// Write to temporary file first, then rename for atomicity
 	tempPath := filePath + ".tmp"
 	if err := os.WriteFile(tempPath, data, 0644); err != nil {
 		return fmt.Errorf("failed to write temporary file: %w", err)
 	}
-	
+
 	if err := os.Rename(tempPath, filePath); err != nil {
 		os.Remove(tempPath) // Clean up temp file
 		return fmt.Errorf("failed to rename temporary file: %w", err)
 	}
-	
+
 	return nil
 }
 
@@ -97,17 +97,17 @@ func (r *ProjectRegistry) RegisterProject(name, path string) error {
 	if err != nil {
 		return fmt.Errorf("failed to get absolute path: %w", err)
 	}
-	
+
 	// Check if project already exists
 	if _, exists := r.Projects[name]; exists {
 		return fmt.Errorf("project %s already exists", name)
 	}
-	
+
 	// Check if path is already registered
 	if existingName, exists := r.PathToProject[absPath]; exists {
 		return fmt.Errorf("path %s is already registered as project %s", absPath, existingName)
 	}
-	
+
 	// Create project info
 	projectInfo := &ProjectInfo{
 		Path:         absPath,
@@ -115,11 +115,11 @@ func (r *ProjectRegistry) RegisterProject(name, path string) error {
 		CreatedAt:    time.Now(),
 		LastAccessed: time.Now(),
 	}
-	
+
 	// Add to registry
 	r.Projects[name] = projectInfo
 	r.PathToProject[absPath] = name
-	
+
 	return nil
 }
 
@@ -135,11 +135,11 @@ func (r *ProjectRegistry) GetProjectByPath(path string) (*ProjectInfo, bool) {
 	if err != nil {
 		return nil, false
 	}
-	
+
 	if projectName, exists := r.PathToProject[absPath]; exists {
 		return r.Projects[projectName], true
 	}
-	
+
 	return nil, false
 }
 
@@ -158,11 +158,11 @@ func (r *ProjectRegistry) RemoveProject(name string) error {
 	if !exists {
 		return fmt.Errorf("project %s not found", name)
 	}
-	
+
 	// Remove from both maps
 	delete(r.Projects, name)
 	delete(r.PathToProject, project.Path)
-	
+
 	return nil
 }
 
@@ -184,20 +184,20 @@ func (r *ProjectRegistry) Validate() error {
 			return fmt.Errorf("inconsistent registry: project %s path %s", name, info.Path)
 		}
 	}
-	
+
 	for path, name := range r.PathToProject {
 		if info, exists := r.Projects[name]; !exists || info.Path != path {
 			return fmt.Errorf("inconsistent registry: path %s project %s", path, name)
 		}
 	}
-	
+
 	return nil
 }
 
 // Cleanup removes projects that point to non-existent directories
 func (r *ProjectRegistry) Cleanup() ([]string, error) {
 	var removed []string
-	
+
 	for name, info := range r.Projects {
 		if _, err := os.Stat(info.Path); os.IsNotExist(err) {
 			delete(r.Projects, name)
@@ -205,6 +205,6 @@ func (r *ProjectRegistry) Cleanup() ([]string, error) {
 			removed = append(removed, name)
 		}
 	}
-	
+
 	return removed, nil
 }

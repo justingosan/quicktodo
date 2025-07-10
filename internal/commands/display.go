@@ -132,61 +132,61 @@ func outputTaskDetailHuman(task *models.Task, projectInfo *database.ProjectInfo)
 	// Header
 	statusIcon := getStatusIcon(task.Status)
 	priorityColor := getPriorityIndicator(task.Priority)
-	
+
 	fmt.Printf("%s Task #%d\n", statusIcon, task.ID)
 	fmt.Printf("Title: %s%s\n", priorityColor, task.Title)
-	
+
 	if task.Description != "" {
 		fmt.Printf("Description: %s\n", task.Description)
 	}
-	
+
 	fmt.Printf("Status: %s\n", task.Status)
 	fmt.Printf("Priority: %s\n", task.Priority)
-	
+
 	// Timestamps
-	fmt.Printf("Created: %s (%s)\n", 
-		task.CreatedAt.Format("2006-01-02 15:04:05"), 
+	fmt.Printf("Created: %s (%s)\n",
+		task.CreatedAt.Format("2006-01-02 15:04:05"),
 		task.GetAge())
-	
+
 	if !task.UpdatedAt.Equal(task.CreatedAt) {
-		fmt.Printf("Updated: %s (%s)\n", 
-			task.UpdatedAt.Format("2006-01-02 15:04:05"), 
+		fmt.Printf("Updated: %s (%s)\n",
+			task.UpdatedAt.Format("2006-01-02 15:04:05"),
 			formatTimeAgo(task.UpdatedAt))
 	}
-	
+
 	// Assignment and locking
 	if task.AssignedTo != "" {
 		fmt.Printf("Assigned to: %s\n", task.AssignedTo)
 	}
-	
+
 	if task.IsLocked() {
 		fmt.Printf("Locked by: %s\n", task.LockedBy)
-		fmt.Printf("Locked at: %s (%s)\n", 
-			task.LockedAt.Format("2006-01-02 15:04:05"), 
+		fmt.Printf("Locked at: %s (%s)\n",
+			task.LockedAt.Format("2006-01-02 15:04:05"),
 			formatTimeAgo(task.LockedAt))
-		
+
 		if task.IsStale() {
 			fmt.Printf("🟠 Warning: Lock appears to be stale\n")
 		}
 	}
-	
+
 	// Project info
 	fmt.Printf("\nProject: %s\n", projectInfo.Name)
 	if verbose {
 		fmt.Printf("Project path: %s\n", projectInfo.Path)
 	}
-	
+
 	// Additional metadata in verbose mode
 	if verbose {
 		fmt.Printf("\nMetadata:\n")
 		fmt.Printf("  Task ID: %d\n", task.ID)
 		fmt.Printf("  Created timestamp: %s\n", task.CreatedAt.Format(time.RFC3339))
 		fmt.Printf("  Updated timestamp: %s\n", task.UpdatedAt.Format(time.RFC3339))
-		
+
 		if !task.LockedAt.IsZero() {
 			fmt.Printf("  Locked timestamp: %s\n", task.LockedAt.Format(time.RFC3339))
 		}
-		
+
 		fmt.Printf("  Status transitions: created -> %s\n", task.Status)
 		if task.IsComplete() {
 			duration := task.UpdatedAt.Sub(task.CreatedAt)
@@ -197,11 +197,11 @@ func outputTaskDetailHuman(task *models.Task, projectInfo *database.ProjectInfo)
 
 func formatTimeAgo(t time.Time) string {
 	duration := time.Since(t)
-	
+
 	if duration < time.Minute {
 		return "just now"
 	}
-	
+
 	if duration < time.Hour {
 		minutes := int(duration.Minutes())
 		if minutes == 1 {
@@ -209,7 +209,7 @@ func formatTimeAgo(t time.Time) string {
 		}
 		return fmt.Sprintf("%d minutes ago", minutes)
 	}
-	
+
 	if duration < 24*time.Hour {
 		hours := int(duration.Hours())
 		if hours == 1 {
@@ -217,7 +217,7 @@ func formatTimeAgo(t time.Time) string {
 		}
 		return fmt.Sprintf("%d hours ago", hours)
 	}
-	
+
 	days := int(duration.Hours() / 24)
 	if days == 1 {
 		return "1 day ago"
@@ -229,7 +229,7 @@ func formatDuration(d time.Duration) string {
 	if d < time.Minute {
 		return "less than a minute"
 	}
-	
+
 	if d < time.Hour {
 		minutes := int(d.Minutes())
 		if minutes == 1 {
@@ -237,7 +237,7 @@ func formatDuration(d time.Duration) string {
 		}
 		return fmt.Sprintf("%d minutes", minutes)
 	}
-	
+
 	if d < 24*time.Hour {
 		hours := int(d.Hours())
 		minutes := int(d.Minutes()) % 60
@@ -250,7 +250,7 @@ func formatDuration(d time.Duration) string {
 		}
 		return fmt.Sprintf("%d hours %d minutes", hours, minutes)
 	}
-	
+
 	days := int(d.Hours() / 24)
 	hours := int(d.Hours()) % 24
 	if days == 1 && hours == 0 {
