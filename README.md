@@ -31,7 +31,7 @@ This creates a `QUICKTODO.md` file with AI usage instructions.
 ### 2. Configure your AI
 Add this to your `.cursorrules` or `CLAUDE.md`:
 ```
-Refer to ./QUICKTODO.md for task management instructions.
+Before doing anything, read the QUICKTODO.md file and follow the instructions to create and manage your tasks
 ```
 
 ### 3. Code with AI in YOLO mode
