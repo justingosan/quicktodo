@@ -7,6 +7,7 @@ import (
 	"quicktodo/internal/config"
 	"quicktodo/internal/database"
 	"quicktodo/internal/models"
+	"quicktodo/internal/notify"
 	"strconv"
 	"strings"
 
@@ -193,6 +194,14 @@ func runSetTaskStatusWithValue(taskIDStr, newStatus string) {
 	// Save updated registry
 	if err := registry.Save(registryPath); err != nil && verbose {
 		fmt.Fprintf(os.Stderr, "Warning: failed to save registry: %v\n", err)
+	}
+
+	// Sync to TODO list if enabled
+	syncToTodoList(task, projectInfo.Name, "status", cfg)
+
+	// Notify web server of task update
+	if err := notify.NotifyTaskUpdated(cfg, task, projectInfo.Name); err != nil && verbose {
+		fmt.Fprintf(os.Stderr, "Warning: failed to notify web server: %v\n", err)
 	}
 
 	// Output result

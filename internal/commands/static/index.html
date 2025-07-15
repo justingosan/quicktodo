@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickTodo - Kanban Board</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <h1>QuickTodo</h1>
+            <div class="project-selector">
+                <label for="project-select">Project:</label>
+                <select id="project-select">
+                    <option value="">Loading projects...</option>
+                </select>
+                <button id="refresh-btn" class="btn btn-secondary">↻ Refresh</button>
+                <button id="settings-btn" class="btn btn-secondary">⚙️ Settings</button>
+            </div>
+        </header>
+
+        <main class="board-container">
+            <div id="loading" class="loading">Loading tasks...</div>
+            <div id="error" class="error" style="display: none;"></div>
+            
+            <div id="kanban-board" class="kanban-board" style="display: none;">
+                <div class="column" data-status="pending">
+                    <div class="column-header">
+                        <h2>Pending</h2>
+                        <span class="task-count">0</span>
+                    </div>
+                    <div class="tasks" id="pending-tasks"></div>
+                </div>
+
+                <div class="column" data-status="in_progress">
+                    <div class="column-header">
+                        <h2>In Progress</h2>
+                        <span class="task-count">0</span>
+                    </div>
+                    <div class="tasks" id="in-progress-tasks"></div>
+                </div>
+
+                <div class="column" data-status="done">
+                    <div class="column-header">
+                        <h2>Done</h2>
+                        <span class="task-count">0</span>
+                    </div>
+                    <div class="tasks" id="done-tasks"></div>
+                </div>
+            </div>
+        </main>
+
+        <button id="add-task-btn" class="fab" title="Add new task">+</button>
+    </div>
+
+    <!-- Task Detail Modal -->
+    <div id="task-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-title">Task Details</h2>
+            
+            <form id="task-form">
+                <input type="hidden" id="task-id">
+                
+                <div class="form-group">
+                    <label for="task-title">Title:</label>
+                    <input type="text" id="task-title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="task-description">Description:</label>
+                    <textarea id="task-description" rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="task-priority">Priority:</label>
+                    <select id="task-priority">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="task-status">Status:</label>
+                    <select id="task-status">
+                        <option value="pending">Pending</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="done">Done</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="task-assigned">Assigned To:</label>
+                    <input type="text" id="task-assigned">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" id="delete-btn" class="btn btn-danger">Delete</button>
+                    <button type="button" id="cancel-btn" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" id="settings-close">&times;</span>
+            <h2>Settings</h2>
+            
+            <form id="settings-form">
+                <div class="form-group">
+                    <label for="copy-prefix">Copy Prefix:</label>
+                    <input type="text" id="copy-prefix" placeholder="Run `quicktodo context` and read CLAUDE.md before executing any commands.">
+                    <small class="form-help">This text will be prepended to task details when copying (helpful for AI assistance)</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="copy-format">Copy Format:</label>
+                    <select id="copy-format">
+                        <option value="simple">Simple (Title - Description)</option>
+                        <option value="detailed">Detailed (includes priority, status, etc.)</option>
+                        <option value="markdown">Markdown format</option>
+                    </select>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                    <button type="button" id="settings-cancel-btn" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

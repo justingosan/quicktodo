@@ -4,9 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"quicktodo/internal/config"
 	"quicktodo/internal/database"
 	"quicktodo/internal/models"
+	"quicktodo/internal/notify"
+	"quicktodo/internal/sync"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -138,6 +141,14 @@ func runCreateTask(cmd *cobra.Command, args []string) {
 		fmt.Fprintf(os.Stderr, "Warning: failed to save registry: %v\n", err)
 	}
 
+	// Sync to TODO list if enabled
+	syncToTodoList(task, projectInfo.Name, "create", cfg)
+
+	// Notify web server of task creation
+	if err := notify.NotifyTaskCreated(cfg, task, projectInfo.Name); err != nil && verbose {
+		fmt.Fprintf(os.Stderr, "Warning: failed to notify web server: %v\n", err)
+	}
+
 	// Output result
 	if jsonOutput {
 		outputTaskJSON(task)
@@ -196,6 +207,35 @@ func outputTaskJSON(task *models.Task) {
 	}
 
 	fmt.Println(string(data))
+}
+
+// syncToTodoList syncs task changes to the AI TODO list if enabled
+func syncToTodoList(task *models.Task, projectName, changeType string, cfg *config.Config) {
+	// Initialize sync manager
+	syncConfigPath := filepath.Join(cfg.DataDir, "sync_config.json")
+	syncManager, err := sync.NewTodoSyncManager(syncConfigPath)
+	if err != nil {
+		if verbose {
+			fmt.Fprintf(os.Stderr, "Warning: failed to initialize sync manager: %v\n", err)
+		}
+		return
+	}
+
+	// Perform sync based on change type
+	switch changeType {
+	case "create":
+		if err := syncManager.OnTaskCreated(task, projectName); err != nil && verbose {
+			fmt.Fprintf(os.Stderr, "Warning: failed to sync task creation: %v\n", err)
+		}
+	case "update", "edit", "status":
+		if err := syncManager.OnTaskUpdated(task, projectName, changeType); err != nil && verbose {
+			fmt.Fprintf(os.Stderr, "Warning: failed to sync task update: %v\n", err)
+		}
+	case "delete":
+		if err := syncManager.OnTaskDeleted(task.ID, projectName); err != nil && verbose {
+			fmt.Fprintf(os.Stderr, "Warning: failed to sync task deletion: %v\n", err)
+		}
+	}
 }
 
 func init() {
